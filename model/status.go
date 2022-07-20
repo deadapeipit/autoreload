@@ -9,6 +9,11 @@ type WeatherStatus struct {
 	Status Status `json:"status"`
 }
 
+type CompiledWeatherStatus struct {
+	Status         Status `json:"status"`
+	StatusCompiled string `json:"status_compiled"`
+}
+
 type Status struct {
 	Water int `json:"water"`
 	Wind  int `json:"wind"`
@@ -38,29 +43,14 @@ func RandomValueStatus() (status WeatherStatus) {
 	return status
 }
 
-func (s *Status) CheckStatus() (string, string) {
-	statusWater := ""
-	statusWind := ""
-	switch wtr := s.Water; {
-	case wtr <= 5:
-		statusWater = "aman"
-	case wtr <= 8:
-		statusWater = "siaga"
-	case wtr > 8:
-		statusWater = "bahaya"
-	default:
-		statusWater = "bahaya"
+func (s *Status) CheckStatus() string {
+	overallStatus := ""
+	if s.Water <= 5 && s.Wind <= 6 {
+		overallStatus = "SAFE"
+	} else if s.Water <= 8 && s.Wind <= 15 {
+		overallStatus = "STANDBY"
+	} else {
+		overallStatus = "DANGER"
 	}
-
-	switch wind := s.Wind; {
-	case wind <= 6:
-		statusWind = "aman"
-	case wind <= 15:
-		statusWind = "siaga"
-	case wind > 15:
-		statusWind = "bahaya"
-	default:
-		statusWind = "bahaya"
-	}
-	return statusWater, statusWind
+	return overallStatus
 }

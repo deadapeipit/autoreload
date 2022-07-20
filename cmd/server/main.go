@@ -1,14 +1,21 @@
 package main
 
 import (
+	"autoreload/handler"
 	"autoreload/model"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
+	"os"
+	"strings"
 	"time"
+
+	"github.com/gorilla/mux"
 )
 
+//writefile to write html/weatherstatus.json
 func writefile() {
 	data := model.RandomValueStatus()
 	file, _ := json.MarshalIndent(data, "", "")
@@ -19,6 +26,13 @@ func writefile() {
 }
 
 func main() {
+	wd, _ := os.Getwd()
+
+	//check is debug true
+	if strings.Contains(wd, "cmd") {
+		os.Chdir("..")
+		os.Chdir("..")
+	}
 	ticker := time.NewTicker(14 * time.Second)
 	quit := make(chan struct{})
 	go func() {
@@ -32,7 +46,18 @@ func main() {
 			}
 		}
 	}()
-	http.Handle("/", http.FileServer(http.Dir("./html")))
-	http.ListenAndServe(":8080", nil)
+
+	r := mux.NewRouter()
+	r.HandleFunc("/assignment3", handler.Assignment3Handler)
+
+	fmt.Println("Now listening on port 127.0.0.1:8080")
+	srv := &http.Server{
+		Handler:      r,
+		Addr:         "127.0.0.1:8080",
+		WriteTimeout: 15 * time.Second,
+		ReadTimeout:  15 * time.Second,
+	}
+
+	log.Fatal(srv.ListenAndServe())
 
 }

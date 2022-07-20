@@ -1,35 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <script src=
-		"https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
-		</script>
-		<!-- <script src="./script.js"></script> -->
-    <script type="text/javascript">
-     
-        function refreshVal(){
-            $.getJSON("weatherstatus.json", function(json) {
-                var waterPoint = json.status.water
-                var windPoint = json.status.wind
-                var overallStatus = ""
-                
-                if(parseInt(waterPoint) <=5 && parseInt(windPoint) <=6){
-                    overallStatus = "safe"
-                }else if(parseInt(waterPoint)<=8 && parseInt(windPoint)<=15){
-                    overallStatus = "standby"
-                }else{
-                    overallStatus = "danger"
-                }
-
-                var weatherStatus = "status "+overallStatus
-                var weatherText= "Water status : "+waterPoint+ " m, <br> wind status : "+windPoint+" m/s"
-                document.getElementById('pInfo').innerHTML = weatherText
-                document.getElementById('hStatus').innerHTML = weatherStatus
-            });
-      
-        }
-    </script>
-        <title>W3.CSS Template</title>
+        <!-- <title>W3.CSS Template</title> -->
         <meta charset="UTF-8">
         <meta http-equiv="refresh" content="15">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -54,16 +26,14 @@
             }
         </style>
     </head>
-<body onload="refreshVal()">
-
+<body>
+ 
     <div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
-        <div class="w3-display-topleft w3-padding-large w3-xlarge">
-            
-        </div>
         <div class="w3-display-middle">
-            <h1 class="w3-jumbo w3-animate-top" style="text-transform:uppercase;" id="hStatus"></h1>
+            <h1 class="w3-jumbo w3-animate-top" style="text-transform:uppercase;" >STATUS {{.StatusCompiled}}</h1>
             <hr class="w3-border-grey" style="margin:auto;width:40%">
-            <p class="w3-large w3-center" id="pInfo"></p>
+            <p class="w3-large w3-center">Water status : {{.Status.Water}} m,</p>
+            <p class="w3-large w3-center">wind status : {{.Status.Wind}} m/s</p>
         </div>
     </div>
 

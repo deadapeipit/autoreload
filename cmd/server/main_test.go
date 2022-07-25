@@ -24,6 +24,8 @@ func Test_writefile(t *testing.T) {
 		os.Chdir("..")
 		os.Chdir("..")
 	}
+
+	assert.FileExists(t, jsonPath)
 	file, err := ioutil.ReadFile(jsonPath)
 	assert.NotNil(t, file)
 	assert.NoError(t, err)
